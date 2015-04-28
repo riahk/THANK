@@ -22,6 +22,10 @@ angular.module('starter', ['ionic', 'ui.router'])
       url: '/welcome',
       templateUrl: 'welcome.html'
     })
+    .state('login', {
+      url: '/login',
+      templateUrl: 'loginView.html'
+    })
 })
 .factory('Thank', function($http) {
   return {
@@ -50,7 +54,7 @@ angular.module('starter', ['ionic', 'ui.router'])
     }
   }
 })
-.controller('ThankCtrl', function($scope, $ionicModal, Thank) {
+.controller('ThankCtrl', function($scope, $ionicModal, Thank, $ionicSideMenuDelegate) {
   $ionicModal.fromTemplateUrl('thank-modal.html', {
     scope: $scope,
     animation: 'slide-in-up'
@@ -86,6 +90,11 @@ angular.module('starter', ['ionic', 'ui.router'])
     Thank.getThanks($scope);
   }
   $scope.getThanks($scope);
+  
+  $scope.toggleMenuLeft = function() {
+    console.log('clicked!');
+    $ionicSideMenuDelegate.toggleLeft();
+  };
 })
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
