@@ -14,6 +14,7 @@
 
     <!-- ionic/angularjs js -->
     <script src="lib/ionic/js/ionic.bundle.js"></script>
+    <script src="lib/angular-ui-router/release/angular-ui-router.min.js"></script>
 
     <!-- cordova script (this will be a 404 during development) -->
     <script src="cordova.js"></script>
@@ -22,29 +23,23 @@
     <script src="js/app.js"></script>
   </head>
   <body ng-app="starter" ng-controller="ThankCtrl">
-
     <ion-pane>
-      <ion-header-bar class="bar-stable">
-        <h1 class="title">THANK</h1>
-        <button class="button icon-right ion-home"
+    <ion-header-bar class="bar-stable">
+        <div class="button-bar">
+        <button ui-sref="welcome" class="button ion-navicon-round"></button>
+        <button ui-sref="thanks" class="button ion-android-home"></button>
+        <button class="button icon-right ion-compose"
           ng-click="openModal()"></button>  
-      </ion-header-bar>
-      <ion-content>
-        <ion-list>
-          <ion-item ng-repeat="thank in thanks">
-          <p>I'm thankful for {{thank.body}}</p>
-          <button class="button" ng-click="removeThank($index)">Delete</button>
-          <button class="button button-positive" ng-click="incrementLikes($index)">Like</button>
-          </ion-item>
-        </ion-list> 
-      </ion-content>
-    </ion-pane>
+        </div>
+        </ion-header-bar>
+        <ion-nav-view></ion-nav-view>
+      </ion-pane>
     
     <script id="thank-modal.html" type="text/ng-template">
       <div class="modal">
       <ion-header-bar class="bar-secondary">
-        <button class="button icon-right" ng-click="closeModal()">Cancel</button>
         <h1 class="title">New Thank</h1>
+        <button class="button icon-right" ng-click="closeModal()">Cancel</button>  
       </ion-header-bar>
 
       <ion-content>
@@ -59,5 +54,37 @@
       </ion-content>
       </div>
     </script>
+
+    <script id="welcome.html" type="text/ng-template">
+      <ion-view>
+        <ion-content>
+        <div class="card">
+          <div class="item item-divider">
+            Welcome to THANK!
+          </div>
+          <div class="item item-text-wrap">
+            THANK helps you to keep track of what you're thankful for, and see what everybody else is thankful for too! Spread positivity by letting everybody know what you were thankful for today. : ]
+          </div>
+        </div>
+        </ion-content>
+      </ion-view>
+    </script>
+
+    <script type="text/ng-template" id="thankView.html">
+      <ion-view>
+      <ion-content>
+      <ion-list>
+        <ion-item ng-repeat="thank in thanks | orderBy: '-date'">
+          <div class="item item-text-wrap">I'm thankful for {{thank.body}}
+            <div>{{ thank.date | date }}</div>
+            <button class="button" ng-click="removeThank($index)">Delete</button>
+            <button class="button button-positive" ng-click="incrementThanks($index)">THANK</button>
+          </div>
+        </ion-item>
+        </ion-list>
+        </ion-content>
+      </ion-view>
+    </script>
+  
   </body>
 </html>

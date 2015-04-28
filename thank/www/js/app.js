@@ -3,7 +3,26 @@
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
-angular.module('starter', ['ionic'])
+angular.module('starter', ['ionic', 'ui.router'])
+.config(function($stateProvider, $urlRouterProvider) {
+  $urlRouterProvider.otherwise('/')
+
+  $stateProvider
+    /*.state('tabs', {
+      url: '/tab',
+      abstract: true,
+      templateUrl: 'tabs.html'
+    })*/
+    .state('thanks', {
+      url: '/',
+      templateUrl: 'thankView.html',
+      controller: 'ThankCtrl'
+    })
+    .state('welcome', {
+      url: '/welcome',
+      templateUrl: 'welcome.html'
+    })
+})
 .factory('Thank', function($http) {
   return {
     getThanks: function(scope) {
@@ -19,6 +38,15 @@ angular.module('starter', ['ionic'])
       console.log('making post request...');
       $http.post('/api/thanks', { 'message': body }, { headers: {'Content-Type':'application/json','Accept':'application/json'}}).success(function(data) { console.log('success!'); })
       .error(function(err) { console.log('error!',err) });
+    },
+
+    deleteThanks: function(index, scope) {
+      console.log(scope.thanks[index]);
+      $http.delete('/api/thanks', { method: 'DELETE', params: scope.thanks[index]})
+        .success(function(data) {
+          console.log('deleted!');
+        })
+        .error(function(err) { console.log('error!',err) });
     }
   }
 })
@@ -49,9 +77,10 @@ angular.module('starter', ['ionic'])
     $scope.closeModal();
   }
 
-  $scope.deleteThank = function(index) {
+  $scope.removeThank = function(index) {
     console.log('deleting thank');
-    $scope.thanks.splice(index, 1);
+    console.log($scope.thanks[index]);
+    Thank.deleteThanks(index, $scope);
   }
   $scope.getThanks = function() {
     Thank.getThanks($scope);
