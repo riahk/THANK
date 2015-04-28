@@ -32,7 +32,9 @@
       <ion-content>
         <ion-list>
           <ion-item ng-repeat="thank in thanks">
-            I'm thankful for {{thank.body}}
+          <p>I'm thankful for {{thank.body}}</p>
+          <button class="button" ng-click="removeThank($index)">Delete</button>
+          <button class="button button-positive" ng-click="incrementLikes($index)">Like</button>
           </ion-item>
         </ion-list> 
       </ion-content>
@@ -41,7 +43,7 @@
     <script id="thank-modal.html" type="text/ng-template">
       <div class="modal">
       <ion-header-bar class="bar-secondary">
-        <button class="button" ng-click="closeModal()">Cancel</button>
+        <button class="button icon-right" ng-click="closeModal()">Cancel</button>
         <h1 class="title">New Thank</h1>
       </ion-header-bar>
 
@@ -49,7 +51,7 @@
       <form ng-submit="newThank(newthank)">
         <div class="list">
         <label class="item item-input">
-          <textarea type="text" ng-Model="newthank" placeholder="What are you thankful for?"></textarea>
+          <textarea type="text" class="textfield" ng-Model="newthank" placeholder="What are you thankful for?"></textarea>
         </label>
         <button class="button button-block button-positive">Submit</button>
       </div>

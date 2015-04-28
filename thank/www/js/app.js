@@ -4,7 +4,25 @@
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 angular.module('starter', ['ionic'])
-.controller('ThankCtrl', function($scope, $ionicModal) {
+.factory('Thank', function($http) {
+  return {
+    getThanks: function(scope) {
+      console.log('fetching thanks...');
+      $http.get('/api/thanks')
+        .success(function(data) {
+          console.log(data);
+          scope.thanks = data;
+        });
+    },
+
+    postThanks: function(body) {
+      console.log('making post request...');
+      $http.post('/api/thanks', { 'message': body }, { headers: {'Content-Type':'application/json','Accept':'application/json'}}).success(function(data) { console.log('success!'); })
+      .error(function(err) { console.log('error!',err) });
+    }
+  }
+})
+.controller('ThankCtrl', function($scope, $ionicModal, Thank) {
   $ionicModal.fromTemplateUrl('thank-modal.html', {
     scope: $scope,
     animation: 'slide-in-up'
@@ -26,10 +44,19 @@ angular.module('starter', ['ionic'])
     console.log('new thank!');
     console.log(body);
     if(body.length > 0) {
-      $scope.thanks.push({body: body});
+      Thank.postThanks(body);
     }
     $scope.closeModal();
   }
+
+  $scope.deleteThank = function(index) {
+    console.log('deleting thank');
+    $scope.thanks.splice(index, 1);
+  }
+  $scope.getThanks = function() {
+    Thank.getThanks($scope);
+  }
+  $scope.getThanks($scope);
 })
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
